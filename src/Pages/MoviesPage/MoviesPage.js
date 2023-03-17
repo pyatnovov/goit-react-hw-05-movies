@@ -49,7 +49,7 @@ const MoviesPage = () => {
         <ul>
           {items.map(item => {
             return (
-              <NavLink to="/movies">
+              <NavLink to="/movies/:movieId">
                 <li key={item.id}>{item.title}</li>
               </NavLink>
             );
