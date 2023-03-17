@@ -1,62 +1,27 @@
-import axios from 'axios';
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import Searchbar from 'components/Searchbar/Searchbar';
+import { getMoviesBySearchQuery } from 'services/Services';
 
 const MoviesPage = () => {
-  const [items, setItems] = useState([]);
-  const [query, setQuery] = useState('');
+  const [, setQuery] = useState('');
+  const [, setItems] = useState([]);
+  const location = useLocation();
 
-  const handleChange = e => {
-    setQuery(e.target.value.toLowerCase());
-  };
+  const query = new URLSearchParams(location.search).get('query') ?? '';
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (query.trim() === '') {
-      alert('Введіть назву фільму');
+  useEffect(() => {
+    if (!query) {
       return;
     }
-    setQuery('');
+    getMoviesBySearchQuery(query).then(res => {
+      setItems(res.results);
+    });
+  }, [query]);
+  const onClick = res => {
+    setQuery(res);
   };
-  const onSubmit = () => {
-    async function fetchData() {
-      const fetch = await axios
-        .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=09994a796f4e1a9c14a0723469809976&language=en-US&query=${query}&page=1&include_adult=false`
-        )
-        .then(resp => resp.data.results);
-      setItems(fetch);
-    }
-    fetchData();
-  };
-  // useEffect(() => {
-  //   getPopularMovies().then(response => {
-  //     setItems(response.results);
-  //   });
-  // }, []);
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <input type="text" value={query} onChange={handleChange} />
-        </label>
-        <button type="submit" onClick={onSubmit}>
-          Search
-        </button>
-      </form>
-      {items.length !== 0 && (
-        <ul>
-          {items.map(item => {
-            return (
-              <NavLink to="/movies/:movieId">
-                <li key={item.id}>{item.title}</li>
-              </NavLink>
-            );
-          })}
-        </ul>
-      )}
-    </div>
-  );
+  return <Searchbar onSubmit={onClick}></Searchbar>;
 };
 export default MoviesPage;

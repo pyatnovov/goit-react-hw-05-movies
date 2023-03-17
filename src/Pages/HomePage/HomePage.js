@@ -1,7 +1,7 @@
-import { getPopularMovies } from 'services/Services';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Container from 'components/Container/Container';
+import { getPopularMovies } from 'services/Services';
+import { NavLink } from 'react-router-dom';
+
 const HomePage = () => {
   const [items, setItems] = useState([]);
 
@@ -10,18 +10,15 @@ const HomePage = () => {
       setItems(response.results);
     });
   }, []);
+
   return (
-    <Container>
-      <ul>
-        {items.map(item => {
-          return (
-            <li key={item.id}>
-              <Link>{item.title}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </Container>
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>
+          <NavLink>{item.title}</NavLink>
+        </li>
+      ))}
+    </ul>
   );
 };
 export default HomePage;
