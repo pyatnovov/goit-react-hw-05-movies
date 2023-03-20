@@ -1,27 +1,61 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import Searchbar from 'components/Searchbar/Searchbar';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getMoviesBySearchQuery } from 'services/Services';
 
 const MoviesPage = () => {
-  const [, setQuery] = useState('');
-  const [, setItems] = useState([]);
-  const location = useLocation();
+  const [items, setItems] = useState([]);
+  const [query, setQuery] = useState('');
 
-  const query = new URLSearchParams(location.search).get('query') ?? '';
-
-  useEffect(() => {
-    if (!query) {
-      return;
-    }
-    getMoviesBySearchQuery(query).then(res => {
-      setItems(res.results);
-    });
-  }, [query]);
-  const onClick = res => {
-    setQuery(res);
+  const handleChange = e => {
+    setQuery(e.target.value.toLowerCase());
   };
 
-  return <Searchbar onSubmit={onClick}></Searchbar>;
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (query.trim() === '') {
+      alert('Введіть назву фільму');
+      return;
+    }
+    setQuery('');
+  };
+  const onSubmit = () => {
+    async function fetchData() {
+      const fetch = await getMoviesBySearchQuery(query).then(response => {
+        return response.results;
+      });
+
+      setItems(fetch);
+    }
+    fetchData();
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <input type="text" value={query} onChange={handleChange} />
+        </label>
+        <button
+          type="submit"
+          style={{ width: 70, height: 30 }}
+          onClick={onSubmit}
+        >
+          Search
+        </button>
+      </form>
+      {items.length !== 0 && (
+        <ul>
+          {items.map(item => {
+            return (
+              <li key={item.id}>
+                <Link to={`/movies/${item.id}`}>{item.title}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
 };
+
 export default MoviesPage;
