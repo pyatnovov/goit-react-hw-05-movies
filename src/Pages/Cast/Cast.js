@@ -6,6 +6,7 @@ import img from 'img/picture-vector-icon-no-image-260nw-1732584341.webp';
 const Cast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
+  const [, setError] = useState(null);
 
   useEffect(() => {
     const fetchCast = async () => {
@@ -14,7 +15,7 @@ const Cast = () => {
           return setCast(response.cast);
         });
       } catch (error) {
-        alert(error);
+        setError(error);
       }
     };
     fetchCast();

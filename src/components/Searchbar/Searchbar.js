@@ -20,6 +20,7 @@ const Searchbar = ({ onSubmit }) => {
 
   return (
     <header>
+      <Link to={location.state.from}></Link>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

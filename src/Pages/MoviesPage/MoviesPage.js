@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { getMoviesBySearchQuery } from 'services/Services';
-
+import MovieInfo from 'components/MovieInfo/MovieInfo';
 const MoviesPage = () => {
   const [items, setItems] = useState([]);
   const [query, setQuery] = useState('');
+  const location = useLocation();
 
   const handleChange = e => {
     setQuery(e.target.value.toLowerCase());
@@ -43,17 +44,7 @@ const MoviesPage = () => {
           Search
         </button>
       </form>
-      {items.length !== 0 && (
-        <ul>
-          {items.map(item => {
-            return (
-              <li key={item.id}>
-                <Link to={`/movies/${item.id}`}>{item.title}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <MovieInfo items={items} location={location} />
     </div>
   );
 };
