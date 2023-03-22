@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Form } from './Searchbar.styled';
 const Searchbar = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
+  const location = useLocation();
 
   const handleChange = e => {
     setQuery(e.target.value.toLowerCase());
