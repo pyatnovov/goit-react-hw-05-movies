@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Form } from './Searchbar.styled';
 const Searchbar = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
 
@@ -21,7 +22,7 @@ const Searchbar = ({ onSubmit }) => {
   return (
     <header>
       <Link to={location.state.from}></Link>
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <input
           type="text"
           autoComplete="off"
@@ -33,7 +34,7 @@ const Searchbar = ({ onSubmit }) => {
         <button type="submit" onClick={onSubmit}>
           Search
         </button>
-      </form>
+      </Form>
     </header>
   );
 };
