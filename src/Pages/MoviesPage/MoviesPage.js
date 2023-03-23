@@ -1,27 +1,33 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+
 import { getMoviesBySearchQuery } from 'services/Services';
 import MovieInfo from 'components/MovieInfo/MovieInfo';
 const MoviesPage = () => {
   const [items, setItems] = useState([]);
-  const [query, setQuery] = useState('');
-  const location = useLocation();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get('search') ?? '';
 
   const handleChange = e => {
-    setQuery(e.target.value.toLowerCase());
+    const nextParams = e.target.value.toLowerCase();
+    if (nextParams === '') {
+      return setSearchParams({});
+    }
+    setSearchParams({ search: nextParams });
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (query.trim() === '') {
+    if (search.trim() === '') {
       alert('Введіть назву фільму');
       return;
     }
-    setQuery('');
+    setSearchParams('');
   };
   const onSubmit = () => {
     async function fetchData() {
-      const fetch = await getMoviesBySearchQuery(query).then(response => {
+      const fetch = await getMoviesBySearchQuery(search).then(response => {
         return response.results;
       });
 
@@ -34,7 +40,7 @@ const MoviesPage = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <label>
-          <input type="text" value={query} onChange={handleChange} />
+          <input type="text" value={search} onChange={handleChange} />
         </label>
         <button
           type="submit"
@@ -44,7 +50,7 @@ const MoviesPage = () => {
           Search
         </button>
       </form>
-      <MovieInfo items={items} location={location} />
+      <MovieInfo items={items} />
     </div>
   );
 };

@@ -1,18 +1,18 @@
 import {
-  Link,
   NavLink,
   Outlet,
-  useLocation,
   useParams,
+  Link,
+  useLocation,
 } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getMoviesById } from 'services/Services';
 import img from 'img/picture-vector-icon-no-image-260nw-1732584341.webp';
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [item, setItem] = useState([]);
   const location = useLocation();
-  console.log(location);
+  const backLinkRef = useRef(location.state?.from ?? '/movies');
 
   useEffect(() => {
     getMoviesById(movieId).then(item => {
@@ -22,8 +22,7 @@ const MovieDetailsPage = () => {
 
   return (
     <>
-      <Link to={location.state.from}>Go Back</Link>
-
+      <Link to={backLinkRef.current}>Go back</Link>
       {item && (
         <div>
           {item.poster_path ? (
@@ -46,11 +45,11 @@ const MovieDetailsPage = () => {
       <hr />
       <div>
         <h2>Additional Information</h2>
-        <NavLink to={`/movies/${movieId}/reviews`} state={location.state}>
+        <NavLink to={`/movies/${movieId}/reviews`}>
           <p>Reviews</p>
         </NavLink>
 
-        <NavLink to={`/movies/${movieId}/cast`} state={location.state}>
+        <NavLink to={`/movies/${movieId}/cast`}>
           <p>Cast</p>
         </NavLink>
         <hr />

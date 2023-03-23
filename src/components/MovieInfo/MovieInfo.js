@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-const MovieInfo = ({ items, location }) => {
+import { Link, useLocation } from 'react-router-dom';
+
+const MovieInfo = ({ items }) => {
+  const location = useLocation();
   return (
     <ul>
       {items.map(item => (
@@ -17,6 +19,5 @@ const MovieInfo = ({ items, location }) => {
 
 MovieInfo.propTypes = {
   items: PropTypes.array.isRequired,
-  location: PropTypes.object.isRequired,
 };
 export default MovieInfo;
