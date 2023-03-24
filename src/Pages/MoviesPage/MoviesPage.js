@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { getMoviesBySearchQuery } from 'services/Services';
@@ -35,6 +35,18 @@ const MoviesPage = () => {
     }
     fetchData();
   };
+  useEffect(() => {
+    if (search) {
+      async function fetchData() {
+        const fetch = await getMoviesBySearchQuery(search).then(response => {
+          return response.results;
+        });
+
+        setItems(fetch);
+      }
+      fetchData();
+    }
+  }, [search]);
 
   return (
     <div>
