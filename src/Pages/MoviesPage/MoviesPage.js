@@ -25,16 +25,7 @@ const MoviesPage = () => {
     }
     setSearchParams('');
   };
-  const onSubmit = () => {
-    async function fetchData() {
-      const fetch = await getMoviesBySearchQuery(search).then(response => {
-        return response.results;
-      });
 
-      setItems(fetch);
-    }
-    fetchData();
-  };
   useEffect(() => {
     if (search) {
       async function fetchData() {
@@ -54,13 +45,6 @@ const MoviesPage = () => {
         <label>
           <input type="text" value={search} onChange={handleChange} />
         </label>
-        <button
-          type="submit"
-          style={{ width: 70, height: 30 }}
-          onClick={onSubmit}
-        >
-          Search
-        </button>
       </form>
       <MovieInfo items={items} />
     </div>
